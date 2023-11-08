@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .login-container {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4 login-container">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Login</h3>
+                </div>
+                <div class="card-body">
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email"  class="form-control" id="email"  name="email" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.querySelector('#login-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(document.querySelector('#login-form'));
+        const email = formData.get('email');
+        const password = formData.get('password');
+console.log(email,password,"gotttttt")
+        // Send a POST request to obtain the JWT token
+        fetch('http://127.0.0.1:8000/token/', {
+            method: 'POST',
+            body: JSON.stringify({ email, password }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.access) {
+            
+                localStorage.setItem('token', data.access);
+              
+                const username = JSON.parse(atob(data.access.split('.')[1])).username;
+                const isSuperuser = JSON.parse(atob(data.access.split('.')[1])).is_superuser;
+                
+                if (isSuperuser === false) {
+                    window.location.href = '{% url 'home' %}';
+                } else {
+                    window.location.href = '{% url 'dashboard' %}';
+                }
+            } else {
+                alert('Login failed. Check your credentials.');
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

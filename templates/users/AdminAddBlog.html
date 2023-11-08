@@ -1,0 +1,57 @@
+{% extends 'users/Dashboard.html' %}
+{% load static %}
+
+{% block content %}
+
+<h2>Add New Blog</h2>
+{% comment %} <a href="{%url 'adminapp:viewproduct'%}" class="btn-3 float-end">
+            <i class="fa fa-reply"></i> Back</a> {% endcomment %}
+<div class="card shadow">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom: 2px solid orange;">Add Blog</h5>
+        <div class="container-fluid">
+            <form action="{% url 'addblog' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Blog Name</label>
+                            <input type="text" name="title" class="form-control" placeholder="Blog Name" required>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Blog Description Name</label>
+                            <input type="text" name="description" class="form-control" placeholder="Blog description" required>
+                        </div>
+                    </div>
+                 
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>blog Image</label>
+                            <input type="file" name="image" class="form-control" required>
+                        </div>
+                    </div>
+
+                </div>
+                <input type="hidden" name="user_id" id="user_id">
+                <input type="submit" value="Submit" class="m-2 px-3 btn btn-primary">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (token) {
+            const user_id = parseInt(JSON.parse(atob(token.split('.')[1])).user_id);
+            console.log(user_id, "gettinggggg");
+            document.getElementById('user_id').value = user_id;
+        }
+    </script>
+    
+
+</div>
+{% endblock %}

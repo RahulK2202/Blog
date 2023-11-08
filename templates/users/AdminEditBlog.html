@@ -1,0 +1,29 @@
+{% extends 'users/Dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="modal-body">
+    <form method="post" action="{% url 'updateblog' blogId=blog_data.id %}">
+
+        {% csrf_token %}
+        {% comment %} <input type="hidden" name="_method" value="PUT"> {% endcomment %}
+        <!-- Rest of your form fields here -->
+        <div class="form-group">
+            <label for="modal-name">Name:</label>
+            <input type="text" class="form-control" id="modal-name" name="title" value="{{ blog_data.title }}" placeholder="Enter blog name">
+            {% if errors.title %}
+            <p class="text-danger">{{ errors.title.0 }}</p>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for "modal-description">Description:</label>
+            <textarea class="form-control" id="modal-description" name="description" rows="4" placeholder="Enter blog description">{{ blog_data.description }}</textarea>
+            {% if errors.description %}
+            <p class="text-danger">{{ errors.description.0 }}</p>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+    
+</div>
+{% endblock %}

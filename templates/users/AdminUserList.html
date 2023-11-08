@@ -1,0 +1,83 @@
+{% extends 'users/Dashboard.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <!-- Content goes here -->
+    <h1>User Management</h1>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        {% comment %} <td><button class="btn btn-danger">Delete</button></td> {% endcomment %}
+
+                        <td> <button class="btn btn-danger delete-button" data-user-id="{{ user.id }}">Delete</button></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">No users found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </table>
+    </div>
+
+
+    <script>
+     
+        document.addEventListener("DOMContentLoaded", function () {
+          
+            const deleteButtons = document.querySelectorAll(".delete-button");
+    
+            deleteButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const userId = button.getAttribute("data-user-id");
+    
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Yes, delete it!",
+                        cancelButtonText: "No, cancel",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`http://127.0.0.1:8000/userlist/${userId}/`, {
+                                method: "DELETE"
+                            }) .then(data => {
+                                if (data.message === "success") {
+                                    Swal.fire("Success", "User deleted successfully.", "success");
+                                    // User was deleted successfully, you can remove the row from the table
+                                   
+                                } else {
+                                    Swal.fire("Error", "Failed to delete user.", "error");
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    
+
+
+
+
+
+</main>
+
+{% endblock %}

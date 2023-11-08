@@ -1,0 +1,232 @@
+{% extends 'users/UserHome.html' %}
+{% load static %}
+
+{% block usercontent %}
+<style>
+  body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+  }
+
+  .blog-post {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      padding: 20px;
+      box-sizing: border-box;
+  }
+
+  .blog-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 10px 0;
+  }
+
+  .blog-description {
+      font-size: 16px;
+      margin: 10px 0;
+  }
+
+  .like-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+  }
+
+  .comments {
+      margin-top: 20px;
+  }
+
+  .comment {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+  }
+
+  .comment-form {
+      margin-top: 20px;
+  }
+
+  .comment-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      resize: none;
+  }
+
+  .comment-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+  }
+
+  .blog-image {
+      max-width: 100%; /* Set the maximum width to fit the container */
+      height: auto; /* Maintain aspect ratio */
+  }
+</style>
+ <div class="container">
+  {% for b in blogs %}
+  <div class="blog-post">
+      <img class="blog-image" src="{{ b.image.url }}" alt="{{ b.title }}">
+      <h1 class="blog-title">{{ b.title }}</h1>
+      <p class="blog-description">{{ b.description }}</p>
+
+
+      {% comment %} <button class="like-button">Like</button> {% endcomment %}
+      
+   <form method="post" action="{% url 'likepost' b.id  %}">
+    {% csrf_token %}
+    <input type="hidden" name="user_id"  class="userid">
+    {% if b.id in liked_posts %}
+        <input type="hidden" name="like_value" value="1">
+        <button type="submit">Dislike</button>
+    {% else %}
+        <input type="hidden" name="like_value" value="0">
+        <button type="submit">Like</button>
+    {% endif %}
+</form>
+
+
+
+
+<a href="{% url 'getcomment' b.id %}" class="show-comments-link">Show Comments</a>
+    
+
+   {%if  comments%}   
+  
+      {% for comment in comments %}
+      
+      {% if comment.post.id == b.id %}
+     
+     
+      <div class="comments" >
+          <div class="comment">
+              <p>{{ comment.user.username }}: {{ comment.comment }}</p>
+          </div>
+      </div>
+
+      {% endif %} 
+      {% endfor %}
+
+      {% endif %}
+      
+      
+
+
+
+
+
+
+      {% comment %} <form  method="post" action="{% url 'addcomment' %}">
+          {% csrf_token %}
+          <textarea class="comment-input" name="comment" placeholder="Add a comment"></textarea>
+          
+          <input type="hidden" name="post" value="{{ b.id }}">
+          <input type="hidden" name="userid" id="userid">
+          <input type="hidden" name="user_id" id="user_id_{{ b.id }}">
+          <button class="comment-button" type="submit">Add Comment</button>
+      </form> {% endcomment %}
+
+      <form method="post" action="{% url 'addcomment' %}">
+        {% csrf_token %}
+        <textarea class="comment-input" name="comment" placeholder="Add a comment"></textarea>
+        <input type="hidden" name="post" value="{{ b.id }}">
+        <input type="number" name="userid"  class="userid">
+        <button class="comment-button" type="submit">Add Comment</button>
+    </form>
+
+
+      
+  </div>
+
+
+  {% comment %} <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const user_id = parseInt(JSON.parse(atob(token.split('.')[1])).user_id);
+            console.log(user_id, "gettinggggg");
+            document.getElementById('user_id').value = user_id;
+        }
+    });
+</script> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+  {% endfor %}
+  
+  <script>
+  const token = localStorage.getItem('token');
+  if (token) {
+      const user_id = parseInt(JSON.parse(atob(token.split('.')[1])).user_id);
+      console.log(user_id, "code 1");
+      const userIdInputs = document.getElementsByClassName('userid');
+      for (let input of userIdInputs) {
+          input.value = user_id;
+          console.log(input.value);
+      }
+  }
+</script>   
+
+
+
+
+
+
+ {% comment %} <script>
+    const token = localStorage.getItem('token');
+    if (token) {
+        const user_id = parseInt(JSON.parse(atob(token.split('.')[1])).user_id);
+        console.log(user_id, "code 2");
+        document.getElementById('user_id_{{ b.id }}').value = user_id;
+        console.log(document.getElementById('user_id_{{ b.id }}').value);
+    }
+</script>   {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} <script>
+    const tokens = localStorage.getItem('token');
+    if (tokens) {
+        const user_id = parseInt(JSON.parse(atob(token.split('.')[1])).user_id);
+        console.log(user_id, "gettinggggg");
+        document.getElementById('user_id').value = user_id;
+        console.log(document.getElementById('user_id').value);
+    }
+</script> {% endcomment %}
+
+</div>
+{% endblock %}
