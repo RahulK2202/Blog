@@ -18,5 +18,5 @@ urlpatterns = [
   path('likepost/<int:post_id>/', views.LikeorDislike, name='likepost'),
 
 
-  path("logout/", views.UserLogoutAPIView.as_view(), name="logout"),
+  path('logout/', views.UserLogoutAPIView.as_view(), name='logout'),
 ]

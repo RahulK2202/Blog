@@ -196,7 +196,7 @@ def LikeorDislike(request, post_id):
 class UserLogoutAPIView(GenericAPIView):
    
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
         try:

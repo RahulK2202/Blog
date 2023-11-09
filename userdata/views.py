@@ -18,11 +18,13 @@ class UserRegistration(CreateAPIView):
         return render(request, 'users/Register.html')
     
     def post(self, request, *args, **kwargs):
-      
+        print("hellooooooooooooooooooooooooooooooo")
+        print(request.data,"thi si sdas")
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
           
             if request.data.get('password') == request.data.get('password2'):
+                print("successss")
                 password = make_password(request.data.get('password'))
                 serializer.save(password=password) 
              
@@ -68,6 +70,9 @@ def dashboard(request):
 
 def LoginView(request):
         return render(request, 'users/Login.html')
+def RegisterView(request):
+        return render(request, 'users/Register.html')
+
 def AdminBlog(request):
         context = {
              'blogs': blogdata.objects.all()
