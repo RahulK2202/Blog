@@ -15,7 +15,7 @@ class AddPostSerializer(serializers.ModelSerializer):
     # user = serializers.PrimaryKeyRelatedField(queryset=AppUsers.objects.all())
     class Meta:
         model = blogdata
-        fields = ["image","title","description","user"]
+        fields = ["image","title","description","user","attachments"]
 
 class BlogdataSerializer(serializers.ModelSerializer):
     class Meta:

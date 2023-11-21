@@ -17,15 +17,25 @@
       </ul>
       <!-- Add a Logout link -->
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
+        {% comment %} <li class="nav-item">
             <a id="logout-link" class="nav-link" href="#"  onclick="logout();">Logout</a>
-        </li>
+        </li> {% endcomment %}
+
+        <script>
+            function logout() {
+               
+                localStorage.removeItem('token');
+            
+              
+                window.location.href = '/login';
+            }
+            </script>
     </ul>
     
   </div>
 </nav>
 
-<script>
+{% comment %} <script>
 
     function logout() {
         const token = localStorage.getItem('token');
@@ -57,7 +67,7 @@
         }
     }
     
-</script>
+</script> {% endcomment %}
 
    
     

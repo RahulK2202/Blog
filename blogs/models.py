@@ -10,6 +10,7 @@ class blogdata(models.Model):
     like_count=models.PositiveIntegerField(default=0)
     comment_count=models.PositiveIntegerField(default=0)
     user=models.ForeignKey(AppUsers,on_delete=models.CASCADE,blank=True)
+    attachments = models.FileField(upload_to='post_attachments/', null=True, blank=True)
 
     def __str__(self):
        return self.title

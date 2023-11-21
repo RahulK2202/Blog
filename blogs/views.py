@@ -17,6 +17,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 # Create your views here.
 
+
+
 class AdminAddBlogs(CreateAPIView):
     queryset = blogdata.objects.all()
     serializer_class = AddPostSerializer
@@ -26,20 +28,24 @@ class AdminAddBlogs(CreateAPIView):
         user_id = request.data.get('user_id')
        
         try:
+            print("hiii",request.data)
             user = AppUsers.objects.get(id=user_id)
             image = request.data.get('image')
             title = request.data.get('title')
             description = request.data.get('description')
+            attachments = request.data.get("attachments")
+            print( attachments,"got this")
          
 
             if user and image and title and description:
                 blog = blogdata.objects.create(
-                    image=image,
+                    # image=image,
                     description=description,
                     title=title,
-                    user=user
+                    user=user,
+                    attachments=attachments
                 )
-
+                blog.image.save(image.name, image)
                 return redirect(reverse('adminblog'))
             else:
                 return Response({'message': 'Missing required data'})
@@ -49,6 +55,7 @@ class AdminAddBlogs(CreateAPIView):
 
 def DeleteBlog(request, blogId):
     blog = get_object_or_404(blogdata, id=blogId)
+    print(blog,"blogsddddd")
     blog.delete()
     return redirect('adminblog')
 

@@ -8,6 +8,9 @@ from django.shortcuts import render
 from django.contrib.auth.hashers import make_password
 from userdata.models import AppUsers
 from blogs.models import *
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_control
 
 class UserRegistration(CreateAPIView):
     queryset = AppUsers.objects.all()
@@ -18,13 +21,13 @@ class UserRegistration(CreateAPIView):
         return render(request, 'users/Register.html')
     
     def post(self, request, *args, **kwargs):
-        print("hellooooooooooooooooooooooooooooooo")
-        print(request.data,"thi si sdas")
+  
+  
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
           
             if request.data.get('password') == request.data.get('password2'):
-                print("successss")
+      
                 password = make_password(request.data.get('password'))
                 serializer.save(password=password) 
              
@@ -74,6 +77,7 @@ def RegisterView(request):
         return render(request, 'users/Register.html')
 
 def AdminBlog(request):
+     
         context = {
              'blogs': blogdata.objects.all()
         }

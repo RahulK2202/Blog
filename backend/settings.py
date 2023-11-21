@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--87^bs9=rs-u+@-9d+&eh+#mx&2lcb-f*!cf4)nn0+2s#k99^v'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'blogs',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +158,18 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AZURE_ACCOUNT_NAME=env('AZURE_ACCOUNT_NAME')
+AZURE_ACCOUNT_KEY=env('AZURE_ACCOUNT_KEY')
+AZURE_CONTAINER=env('AZURE_CONTAINER') 
+DEFAULT_FILE_STORAGE=env('DEFAULT_FILE_STORAGE')
+
+AZURE_BLOB_STORAGE_URL=env('AZURE_BLOB_STORAGE_URL')
+
+
+
+
+
+
+
+
